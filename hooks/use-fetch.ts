@@ -20,16 +20,15 @@ interface UseFetchConfig {
   credentials?: RequestCredentials;
 }
 
-export const useFetch = <T = any>(
-  config: UseFetchConfig = {},
-): UseFetchResult<T> => {
+const DEFAULT_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
+
+export const useFetch = <T = any>(config: UseFetchConfig = {}): UseFetchResult<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const { baseURL = "http://147.45.136.208:3000/api/", defaultHeaders = {} } =
-    config;
+  const { baseURL = DEFAULT_BASE_URL ?? "https://your-api.example.com/api/", defaultHeaders = {} } = config;
 
   const buildUrl = (url: string): string => {
     if (url.startsWith("http")) {

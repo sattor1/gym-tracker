@@ -1,24 +1,27 @@
-const createExpoWebpackConfigAsync = require("@expo/webpack-config");
+const path = require('path');
+const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 
 // Expo CLI will await this method so you can optionally return a promise.
 module.exports = async function (env, argv) {
   const config = await createExpoWebpackConfigAsync(env, argv);
-  // If you want to add a new alias to the config.
-  config.resolve.alias["moduleA"] = "moduleB";
+  config.resolve.alias = {
+    ...(config.resolve.alias || {}),
+    '@': path.resolve(__dirname),
+  };
 
   // Maybe you want to turn off compression in dev mode.
-  if (config.mode === "development") {
+  if (config.mode === 'development') {
     config.devServer.compress = false;
   }
 
   // Or prevent minimizing the bundle when you build.
-  if (config.mode === "production") {
+  if (config.mode === 'production') {
     config.optimization.minimize = false;
   }
 
   config.devServer = {
     proxy: {
-      "/api": "http://147.45.136.208:3000",
+      '/api': 'http://147.45.136.208:3000',
     },
   };
 
